@@ -1,12 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Map, Compass } from 'lucide-react';
+import { Compass } from 'lucide-react';
+import RPGMap from './components/RPGMap';
+import { 
+  RPGDialogBox, 
+  RPGButton, 
+  RPGInput, 
+  RPGLetterBank,
+  RPGNotification 
+} from './components/RPGUIComponents';
+import './styles/rpg-styles.css';
 
 // Game data structure
 const gameData = {
   title: "Bubba's Big Day",
   introduction: {
     title: "Bubba's Big Day",
-    story: "After waiting for what feels like forever for that proposal, you've decided to take matters into your own hands. Your boyfriend seems to be nowhere to be found today, but he's left a trail of clues around Boston. Follow the path he's created, complete the challenges at each location, and perhaps you'll find what you've been waiting for at the end of this adventure...",
+    story: "After waiting for what feels like forever for the proposal, baby has decided to take matters into her own hands, and hunt down Bubba. Bubba seems to be nowhere to be found, but there's a trail of clues left around Boston. Follow the path of crumbs, complete the challenges at each location, and perhaps you'll find what you've been waiting for at the end of this adventure...",
     instructions: "At each location, you'll need to:\n1. Enter the location passcode to confirm you're in the right place\n2. Complete a set of challenges\n3. Solve a riddle to find your next destination"
   },
   locations: [
@@ -422,13 +431,12 @@ const TreasureHunt = () => {
       return () => clearTimeout(timer);
     }
   }, [message]);
-
-  // Render map tiles
-  const renderMapTile = (tileType, x, y) => {
-    // Get the emoji based on tile type
-    const tileEmoji = mapTiles[tileType] || mapTiles.unknown;
+  
+  // Render the game map
+  const renderGameMap = () => {
+    if (!gameState.revealedMap.length) return null;
     
-    // Check if this tile is a location point
+    // Define the positions of locations on the map grid
     const locationPositions = [
       { x: 1, y: 5, type: "house" }, // Apartment
       { x: 4, y: 3, type: "cafe" },  // Cafe
@@ -437,34 +445,14 @@ const TreasureHunt = () => {
       { x: 8, y: 5, type: "hotel" }  // Hotel
     ];
     
-    const isCurrentLocation = locationPositions.some((pos, index) => 
-      pos.x === x && pos.y === y && index === gameState.currentLocationIndex
-    );
-    
     return (
-      <div 
-        key={`${x}-${y}`} 
-        className={`map-tile w-8 h-8 flex items-center justify-center text-lg ${
-          isCurrentLocation ? 'animate-pulse border-2 border-yellow-400' : ''
-        }`}
-      >
-        {tileEmoji}
-      </div>
-    );
-  };
-  
-  // Render the game map
-  const renderGameMap = () => {
-    if (!gameState.revealedMap.length) return null;
-    
-    return (
-      <div className="game-map bg-green-900/50 p-4 rounded-lg border-4 border-yellow-900">
-        <div className="grid grid-cols-10 gap-0">
-          {gameState.revealedMap.map((row, y) => 
-            row.map((tile, x) => renderMapTile(tile, x, y))
-          )}
-        </div>
-      </div>
+      <RPGMap 
+        mapData={gameState.revealedMap}
+        tileTypes={mapTiles}
+        currentLocationIndex={gameState.currentLocationIndex}
+        locationPositions={locationPositions}
+        animate={true}
+      />
     );
   };
 
@@ -496,12 +484,13 @@ const TreasureHunt = () => {
                 <p className="whitespace-pre-line">{gameData.introduction.instructions}</p>
               </div>
             </div>
-            <button 
+            <RPGButton 
               onClick={startGame}
-              className="w-full bg-green-800 hover:bg-green-700 text-amber-200 py-3 px-6 rounded pixelated transition-all duration-300 hover:scale-105 border-2 border-green-700"
+              className="w-full py-3 px-6"
+              primary={true}
             >
               START YOUR QUEST
-            </button>
+            </RPGButton>
           </div>
         )}
         
@@ -523,19 +512,17 @@ const TreasureHunt = () => {
                   <div className="passcode-section">
                     <h3 className="text-amber-200 mb-2 pixelated">Enter Location Passcode:</h3>
                     <div className="flex space-x-2">
-                      <input
-                        type="text"
+                      <RPGInput
                         value={input}
                         onChange={handleInputChange}
-                        className="flex-1 bg-yellow-900/30 border border-yellow-700 rounded p-2 text-amber-100"
                         placeholder="Enter passcode..."
                       />
-                      <button
+                      <RPGButton
                         onClick={checkPasscode}
-                        className="bg-green-800 hover:bg-green-700 text-amber-200 py-2 px-4 rounded pixelated border border-green-700"
+                        primary={true}
                       >
                         UNLOCK
-                      </button>
+                      </RPGButton>
                     </div>
                   </div>
                 )}
@@ -567,19 +554,17 @@ const TreasureHunt = () => {
                         {!gameState.completedChallenges.includes(index) && (
                           <>
                             <div className="flex space-x-2 mb-2">
-                              <input
-                                type="text"
+                              <RPGInput
                                 value={input}
                                 onChange={handleInputChange}
-                                className="flex-1 bg-yellow-900/30 border border-yellow-700 rounded p-2 text-amber-100"
                                 placeholder="Your answer..."
                               />
-                              <button
+                              <RPGButton
                                 onClick={() => checkChallengeAnswer(index)}
-                                className="bg-green-800 hover:bg-green-700 text-amber-200 py-2 px-4 rounded pixelated border border-green-700"
+                                primary={true}
                               >
                                 SUBMIT
-                              </button>
+                              </RPGButton>
                             </div>
                             <button
                               onClick={() => setMessage({ text: challenge.hint, type: "hint" })}
@@ -605,28 +590,24 @@ const TreasureHunt = () => {
                   
                   {!gameState.riddleSolved && (
                     <>
-                      <div className="letter-bank bg-yellow-900/70 p-3 mb-4 rounded-lg flex flex-wrap justify-center">
-                        {currentLocation.finalRiddle.letterBank.split('').map((letter, i) => (
-                          <span key={i} className="inline-block bg-green-800 text-amber-100 w-8 h-8 m-1 flex items-center justify-center rounded-md border border-yellow-700">
-                            {letter}
-                          </span>
-                        ))}
-                      </div>
+                      <RPGLetterBank 
+                        letters={currentLocation.finalRiddle.letterBank} 
+                        onLetterClick={(letter) => setInput(input + letter)}
+                        className="mb-4"
+                      />
                       
                       <div className="flex space-x-2 mb-2">
-                        <input
-                          type="text"
+                        <RPGInput
                           value={input}
                           onChange={handleInputChange}
-                          className="flex-1 bg-yellow-900/30 border border-yellow-700 rounded p-2 text-amber-100"
                           placeholder="Solve the riddle..."
                         />
-                        <button
+                        <RPGButton
                           onClick={checkRiddleAnswer}
-                          className="bg-green-800 hover:bg-green-700 text-amber-200 py-2 px-4 rounded pixelated border border-green-700"
+                          primary={true}
                         >
                           SOLVE
-                        </button>
+                        </RPGButton>
                       </div>
                       <button
                         onClick={() => setMessage({ text: currentLocation.finalRiddle.hint, type: "hint" })}
@@ -656,12 +637,13 @@ const TreasureHunt = () => {
                     <p className="text-lg mb-2">Go to:</p>
                     <p className="text-amber-300 font-bold">{currentLocation.nextLocation}</p>
                   </div>
-                  <button 
+                  <RPGButton 
                     onClick={proceedToNextLocation}
-                    className="w-full bg-green-800 hover:bg-green-700 text-amber-200 py-3 px-6 rounded pixelated transition-all duration-300 hover:scale-105 border-2 border-green-700"
+                    className="w-full py-3 px-6"
+                    primary={true}
                   >
                     I'VE ARRIVED AT THE NEXT LOCATION
-                  </button>
+                  </RPGButton>
                 </div>
               </div>
             )}
@@ -674,19 +656,17 @@ const TreasureHunt = () => {
                   <p className="mb-4">{currentLocation.challenges[0].prompt}</p>
                   
                   <div className="flex space-x-2 mb-2">
-                    <input
-                      type="text"
+                    <RPGInput
                       value={input}
                       onChange={handleInputChange}
-                      className="flex-1 bg-yellow-900/30 border border-yellow-700 rounded p-2 text-amber-100"
                       placeholder="Your answer..."
                     />
-                    <button
+                    <RPGButton
                       onClick={handleFinalChallenge}
-                      className="bg-green-800 hover:bg-green-700 text-amber-200 py-2 px-4 rounded pixelated border border-green-700"
+                      primary={true}
                     >
                       SUBMIT
-                    </button>
+                    </RPGButton>
                   </div>
                   <button
                     onClick={() => setMessage({ text: currentLocation.challenges[0].hint, type: "hint" })}
@@ -718,13 +698,11 @@ const TreasureHunt = () => {
         
         {/* Message display */}
         {message.text && (
-          <div className={`fixed bottom-6 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded shadow-lg animate-fadeIn text-sm md:text-base max-w-md ${
-            message.type === 'success' ? 'bg-green-800 text-amber-100 border-2 border-yellow-600' :
-            message.type === 'error' ? 'bg-yellow-800 text-amber-100 border-2 border-red-700' :
-            message.type === 'hint' ? 'bg-yellow-900 text-amber-100 border-2 border-yellow-700' :
-            'bg-green-900 text-amber-100 border-2 border-yellow-700'
-          }`}>
-            {message.text}
+          <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 max-w-md">
+            <RPGNotification
+              message={message.text}
+              type={message.type}
+            />
           </div>
         )}
       </div>

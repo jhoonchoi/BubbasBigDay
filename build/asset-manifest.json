@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/BubbasBigDay/static/css/main.120291ba.css",
+    "main.js": "/BubbasBigDay/static/js/main.e5683cf5.js",
+    "index.html": "/BubbasBigDay/index.html",
+    "main.120291ba.css.map": "/BubbasBigDay/static/css/main.120291ba.css.map",
+    "main.e5683cf5.js.map": "/BubbasBigDay/static/js/main.e5683cf5.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.120291ba.css",
+    "static/js/main.e5683cf5.js"
+  ]
+}

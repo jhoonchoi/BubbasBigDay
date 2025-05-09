@@ -33,14 +33,14 @@ Here are several easy ways to deploy this application:
 3. Install GitHub Pages: `npm install --save-dev gh-pages`
 4. Add to package.json:
    ```json
-   "homepage": "https://yourusername.github.io/BubbasBigDay",
+   "homepage": "https://jhoonchoi.github.io/BubbasBigDay",
    "scripts": {
      "predeploy": "npm run build",
      "deploy": "gh-pages -d build"
    }
    ```
 5. Run `npm run deploy`
-6. Your site will be published at `https://yourusername.github.io/BubbasBigDay/`
+6. Your site will be published at `https://jhoonchoi.github.io/BubbasBigDay/`
 
 ### Option 2: Netlify Drop (No Account Required)
 
