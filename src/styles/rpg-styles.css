@@ -1,0 +1,431 @@
+/* Import pixel font */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* Apply pixel font to headings */
+h1, h2, h3, .pixelated {
+  font-family: 'Press Start 2P', cursive;
+}
+
+/* Main background texture */
+body {
+  background-color: #2c5530;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23254c29' fill-opacity='0.2'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* RPG tile map styling */
+.game-map {
+  image-rendering: pixelated;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+
+.game-map::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 20px 5px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.map-tile {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  image-rendering: pixelated;
+}
+
+/* RPG border frames */
+.game-section {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.game-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: repeating-linear-gradient(
+    to right,
+    rgba(165, 126, 42, 0.8) 0px,
+    rgba(165, 126, 42, 0.8) 6px,
+    rgba(114, 85, 16, 0.8) 6px,
+    rgba(114, 85, 16, 0.8) 12px
+  );
+}
+
+.game-section::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: repeating-linear-gradient(
+    to right,
+    rgba(86, 140, 59, 0.8) 0px,
+    rgba(86, 140, 59, 0.8) 6px,
+    rgba(53, 94, 59, 0.8) 6px,
+    rgba(53, 94, 59, 0.8) 12px
+  );
+}
+
+/* Game dialog box styling */
+.game-box {
+  position: relative;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* RPG button style */
+button {
+  position: relative;
+  box-shadow: 0 4px 0 #2a5d34;
+  transform: translateY(-2px);
+  transition: all 0.1s ease;
+  image-rendering: pixelated;
+}
+
+button:active {
+  transform: translateY(2px);
+  box-shadow: 0 0 0 #2a5d34;
+}
+
+/* RPG input field styling */
+input {
+  border-width: 2px !important;
+  border-style: solid !important;
+  outline: none !important;
+  background-color: rgba(241, 226, 181, 0.2) !important;
+}
+
+input:focus {
+  border-color: #a87d18 !important;
+  box-shadow: 0 0 0 2px rgba(168, 125, 24, 0.3) !important;
+}
+
+/* Tree tile styling */
+.tile-tree {
+  color: #2a4b1e;
+  background-color: #3a673a;
+  position: relative;
+}
+
+.tile-tree::after {
+  content: '🌲';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Grass tile styling */
+.tile-grass {
+  background-color: #4b7d3a;
+}
+
+/* Path tile styling */
+.tile-path {
+  background-color: #ac8955;
+}
+
+/* Building tile styling */
+.tile-building {
+  background-color: #947652;
+}
+
+/* RPG progress bar */
+.progress-container {
+  height: 12px;
+  background-color: #3c4d36;
+  border: 2px solid #5a6657;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(to right, #7d985a, #5a7d3a);
+  transition: width 0.3s ease;
+}
+
+/* Letter bank styling */
+.letter-bank span {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: rgba(70, 120, 70, 0.8) !important;
+  border: 1px solid #a87d18;
+}
+
+.letter-bank span:hover {
+  background-color: rgba(120, 160, 70, 0.8) !important;
+  transform: translateY(-2px);
+}
+
+/* RPG Map animation */
+@keyframes tileReveal {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.2); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.tile-reveal {
+  animation: tileReveal 0.5s ease-out forwards;
+}
+
+/* Player marker styling */
+.player-marker {
+  position: relative;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Location marker styles */
+.location-marker {
+  position: relative;
+  font-size: 24px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Navigation compass styling */
+.compass-icon {
+  position: relative;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border: 2px solid #a87d18;
+  border-radius: 50%;
+  background: radial-gradient(#634b19, #42340e);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.compass-icon::before {
+  content: '↑';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #f1e2b5;
+  font-weight: bold;
+}
+
+/* RPG message notification */
+.rpg-notification {
+  background-color: rgba(58, 77, 36, 0.95);
+  border: 2px solid #a87d18;
+  color: #f1e2b5;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  padding: 10px 16px;
+  border-radius: 6px;
+  position: relative;
+}
+
+.rpg-notification::before,
+.rpg-notification::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 2px solid #a87d18;
+  border-radius: 2px;
+}
+
+.rpg-notification::before {
+  top: -5px;
+  left: -5px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.rpg-notification::after {
+  bottom: -5px;
+  right: -5px;
+  border-left: none;
+  border-top: none;
+}
+
+/* Footer styling */
+footer {
+  position: relative;
+  overflow: hidden;
+}
+
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: repeating-linear-gradient(
+    to right,
+    rgba(86, 140, 59, 0.8) 0px,
+    rgba(86, 140, 59, 0.8) 6px,
+    rgba(53, 94, 59, 0.8) 6px,
+    rgba(53, 94, 59, 0.8) 12px
+  );
+}
+
+/* RPG-style speech bubble */
+.speech-bubble {
+  position: relative;
+  background: #5a4422;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 20px 0;
+  border: 2px solid #a87d18;
+}
+
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 20px;
+  border-width: 10px 10px 0;
+  border-style: solid;
+  border-color: #5a4422 transparent;
+}
+
+.speech-bubble::before {
+  content: '';
+  position: absolute;
+  bottom: -13px;
+  left: 18px;
+  border-width: 12px 12px 0;
+  border-style: solid;
+  border-color: #a87d18 transparent;
+}
+
+/* RPG inventory style */
+.inventory-slot {
+  width: 40px;
+  height: 40px;
+  background: #5a4422;
+  border: 2px solid #a87d18;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin: 4px;
+  position: relative;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.4);
+}
+
+.inventory-slot::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  height: 1px;
+  background: rgba(255,255,255,0.2);
+}
+
+.inventory-slot::after {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  bottom: 2px;
+  width: 1px;
+  background: rgba(255,255,255,0.2);
+}
+
+/* RPG Title text effect */
+.rpg-title {
+  text-shadow: 
+    3px 3px 0px rgba(0,0,0,0.6),
+    -1px -1px 0px #40260d, 
+    1px -1px 0px #40260d, 
+    -1px 1px 0px #40260d, 
+    1px 1px 0px #40260d;
+  color: #f1e2b5;
+  letter-spacing: 2px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  14% { transform: scale(1.1); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.1); }
+  70% { transform: scale(1); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-heartBeat {
+  animation: heartBeat 1.5s ease-in-out infinite;
+}
+
+/* Mobile optimization */
+@media (max-width: 640px) {
+  .map-tile {
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 16px !important;
+  }
+  
+  .inventory-slot {
+    width: 32px;
+    height: 32px;
+  }
+  
+  h1, h2, h3, .pixelated {
+    letter-spacing: 0;
+    font-size: 0.9em;
+  }
+  
+  .game-box {
+    padding: 12px !important;
+  }
+}
+
+/* Additional styles for custom tile types */
+.tile-house {
+  background-color: #8b6b3e;
+  position: relative;
+}
+
+.tile-cafe {
+  background-color: #a16d42;
+  position: relative;
+}
+
+.tile-restaurant {
+  background-color: #a95a3a;
+  position: relative;
+}
+
+.tile-salon {
+  background-color: #a4428e;
+  position: relative;
+}
+
+.tile-hotel {
+  background-color: #4c6abd;
+  position: relative;
+}
+
+.tile-unknown {
+  background-color: #31493a;
+  position: relative;
+}
