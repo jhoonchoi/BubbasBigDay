@@ -9,7 +9,7 @@ export const RPGDialogBox = ({ children, title, className = '' }) => {
       {title && (
         <div className="mb-2 flex items-center">
           <div className="corner-decoration"></div>
-          <h3 className="text-amber-200 pixelated text-lg">{title}</h3>
+          <h3 className="text-amber-200 text-lg pixelated">{title}</h3>
           <div className="corner-decoration"></div>
         </div>
       )}
@@ -17,7 +17,6 @@ export const RPGDialogBox = ({ children, title, className = '' }) => {
         {children}
       </div>
       
-      {/* CSS for the ornate border decoration */}
       <style jsx>{`
         .rpg-dialog-box {
           position: relative;
@@ -84,7 +83,7 @@ export const RPGButton = ({
       onClick={onClick}
       disabled={disabled}
       className={`
-        rpg-button ${colorScheme} py-2 px-4 rounded pixelated 
+        rpg-button ${colorScheme} py-2 px-4 rounded 
         transition-all duration-300 hover:scale-105 border-2
         ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
         ${className}
@@ -114,6 +113,18 @@ export const RPGButton = ({
           height: 1px;
           background: rgba(255,255,255,0.3);
         }
+        
+        .hover\\:scale-105:hover {
+          transform: scale(1.05);
+        }
+        
+        .transition-all {
+          transition-property: all;
+        }
+        
+        .duration-300 {
+          transition-duration: 300ms;
+        }
       `}</style>
     </button>
   );
@@ -129,7 +140,7 @@ export const RPGInput = ({
   className = '' 
 }) => {
   return (
-    <div className="rpg-input-container">
+    <div className="rpg-input-container w-full">
       <input
         type="text"
         value={value}
@@ -162,57 +173,35 @@ export const RPGInput = ({
 };
 
 /**
- * RPG Progress Bar - Shows completion with a retro RPG style
+ * RPG Letter Bank - Stylized letter tiles for riddles
  */
-export const RPGProgressBar = ({ 
-  current, 
-  total, 
-  label,
+export const RPGLetterBank = ({ 
+  letters, 
+  onLetterClick,
   className = '' 
 }) => {
-  const percentage = Math.min(100, Math.max(0, (current / total) * 100));
-  
   return (
-    <div className={`rpg-progress-container ${className}`}>
-      {label && <div className="text-xs mb-1 text-amber-300">{label}</div>}
-      
-      <div className="progress-container">
+    <div className={`letter-bank flex flex-wrap justify-center gap-1 ${className}`}>
+      {letters.split('').map((letter, i) => (
         <div 
-          className="progress-bar"
-          style={{ width: `${percentage}%` }}
-        ></div>
-      </div>
-      
-      <div className="text-xs text-right text-amber-300/70">
-        {current}/{total}
-      </div>
+          key={i} 
+          className="inline-block bg-green-800 text-amber-100 w-8 h-8 
+                    flex items-center justify-center rounded-md border border-yellow-700 
+                    hover:bg-green-700 cursor-pointer transition-all duration-200"
+          onClick={() => onLetterClick && onLetterClick(letter)}
+        >
+          {letter}
+        </div>
+      ))}
       
       <style jsx>{`
-        .progress-container {
-          height: 12px;
-          background-color: #3c4d36;
-          border: 2px solid #5a6657;
-          border-radius: 2px;
-          overflow: hidden;
-          margin: 2px 0;
-          box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        .letter-bank div {
+          transition: all 0.2s ease;
         }
         
-        .progress-bar {
-          height: 100%;
-          background: linear-gradient(to right, #7d985a, #5a7d3a);
-          transition: width 0.5s ease;
-          position: relative;
-        }
-        
-        .progress-bar::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 1px;
-          background: rgba(255, 255, 255, 0.3);
+        .letter-bank div:hover {
+          transform: translateY(-2px);
+          background-color: #166534;
         }
       `}</style>
     </div>
@@ -238,7 +227,7 @@ export const RPGNotification = ({
   return (
     <div className={`
       rpg-notification ${typeStyles[type]} px-6 py-3 rounded-lg
-      animate-fadeIn text-sm md:text-base max-w-md
+      text-sm md:text-base max-w-md
       ${className}
     `}>
       {message}
@@ -256,6 +245,7 @@ export const RPGNotification = ({
           position: relative;
           border-width: 2px;
           box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+          animation: fadeIn 0.3s ease-out forwards;
         }
         
         .rpg-notification::before,
@@ -286,36 +276,7 @@ export const RPGNotification = ({
           from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: translateY(0); }
         }
-        
-        .animate-fadeIn {
-          animation: fadeIn 0.3s ease-out forwards;
-        }
       `}</style>
-    </div>
-  );
-};
-
-/**
- * RPG Letter Bank - Stylized letter tiles for riddles
- */
-export const RPGLetterBank = ({ 
-  letters, 
-  onLetterClick,
-  className = '' 
-}) => {
-  return (
-    <div className={`letter-bank flex flex-wrap justify-center gap-1 ${className}`}>
-      {letters.split('').map((letter, i) => (
-        <div 
-          key={i} 
-          className="inline-block bg-green-800 text-amber-100 w-8 h-8 
-                    flex items-center justify-center rounded-md border border-yellow-700 
-                    hover:bg-green-700 cursor-pointer transition-all duration-200"
-          onClick={() => onLetterClick && onLetterClick(letter)}
-        >
-          {letter}
-        </div>
-      ))}
     </div>
   );
 };

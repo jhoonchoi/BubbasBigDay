@@ -109,6 +109,37 @@ const RPGMap = ({
           <span>Current</span>
         </div>
       </div>
+      
+      {/* Animation styles */}
+      <style jsx>{`
+        @keyframes tileReveal {
+          0% { transform: scale(0); opacity: 0; }
+          50% { transform: scale(1.2); opacity: 0.7; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .tile-reveal {
+          animation: tileReveal 0.5s ease-out forwards;
+        }
+        
+        .grid-cols-10 {
+          display: grid;
+          grid-template-columns: repeat(10, minmax(0, 1fr));
+        }
+        
+        .animate-pulse {
+          animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+          0%, 100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: .5;
+          }
+        }
+      `}</style>
     </div>
   );
 };
