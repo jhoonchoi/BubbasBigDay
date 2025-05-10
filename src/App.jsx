@@ -313,7 +313,6 @@ function App() {
     return (
       <RPGMap 
         mapData={gameState.revealedMap}
-        tileTypes={mapTiles}
         currentLocationIndex={gameState.currentLocationIndex}
         locationPositions={locationPositions}
         animate={true}
