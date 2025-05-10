@@ -295,29 +295,6 @@ function App() {
     }
   }, [message]);
 
-  // Show all current location hints
-  const showAllHints = () => {
-    if (!currentLocation) return;
-    
-    let hintsText = "";
-    
-    // Add challenge hints
-    if (currentLocation.challenges.length > 0) {
-      hintsText += "Challenge Hints:\n";
-      currentLocation.challenges.forEach((challenge, index) => {
-        hintsText += `- ${challenge.hint}\n`;
-      });
-    }
-    
-    // Add riddle hint if applicable
-    if (currentLocation.finalRiddle && !gameState.riddleSolved) {
-      hintsText += "\nRiddle Hint:\n";
-      hintsText += `- ${currentLocation.finalRiddle.hint}`;
-    }
-    
-    setMessage({ text: hintsText, type: "hint" });
-  };
-
   // Render the game map
   const renderGameMap = () => {
     if (!gameState.revealedMap.length) return null;
@@ -622,19 +599,6 @@ function App() {
             message={message.text}
             type={message.type}
           />
-        </div>
-      )}
-      
-      {/* Hints button */}
-      {gameState.started && !gameState.gameCompleted && (
-        <div className="fixed bottom-6 right-4 z-10">
-          <RPGButton
-            onClick={showAllHints}
-            primary={false}
-            className="text-xs py-1 px-3"
-          >
-            HINTS
-          </RPGButton>
         </div>
       )}
       
