@@ -118,8 +118,8 @@ export const gameData = {
       {
         id: "hotel",
         name: "The Hotel",
-        passcode: "forever",
-        description: "A luxury tower overlooking the city where our next chapter begins.",
+        passcode: "suite",
+        description: "Your Bubba awaits you",
         challenges: [
           {
             type: "task",
@@ -134,8 +134,14 @@ export const gameData = {
             hint: "Ask our friend"
           },
           {
-            type: "task",
+            type: "completion",
             prompt: "Go to room 934",
+            answer: "yes",
+            hint: "Follow your heart"
+          },
+          {
+            type: "completion",
+            prompt: "Open the door and come inside",
             answer: "yes",
             hint: "Follow your heart"
           }

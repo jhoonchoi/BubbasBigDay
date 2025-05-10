@@ -126,10 +126,10 @@ function App() {
   
   // Handle final challenge
   const handleFinalChallenge = () => {
-    if (currentLocation.id === "hotel" && input.toLowerCase() === currentLocation.challenges[0].answer.toLowerCase()) {
+    if (currentLocation.id === "hotel") {
       setGameState({
         ...gameState,
-        completedChallenges: [0],
+        completedChallenges: [0, 1, 2],
         gameCompleted: true
       });
       
@@ -140,8 +140,6 @@ function App() {
       setTimeout(() => {
         document.getElementById('final-message')?.scrollIntoView({ behavior: 'smooth' });
       }, 800);
-    } else {
-      setMessage({ text: "That's not quite right. Try again!", type: "error" });
     }
   };
   
@@ -297,6 +295,29 @@ function App() {
     }
   }, [message]);
 
+  // Show all current location hints
+  const showAllHints = () => {
+    if (!currentLocation) return;
+    
+    let hintsText = "";
+    
+    // Add challenge hints
+    if (currentLocation.challenges.length > 0) {
+      hintsText += "Challenge Hints:\n";
+      currentLocation.challenges.forEach((challenge, index) => {
+        hintsText += `- ${challenge.hint}\n`;
+      });
+    }
+    
+    // Add riddle hint if applicable
+    if (currentLocation.finalRiddle && !gameState.riddleSolved) {
+      hintsText += "\nRiddle Hint:\n";
+      hintsText += `- ${currentLocation.finalRiddle.hint}`;
+    }
+    
+    setMessage({ text: hintsText, type: "hint" });
+  };
+
   // Render the game map
   const renderGameMap = () => {
     if (!gameState.revealedMap.length) return null;
@@ -451,6 +472,14 @@ function App() {
                                 </RPGButton>
                               </div>
                             )}
+                            <div className="text-right">
+                              <button
+                                onClick={() => setMessage({ text: challenge.hint, type: "hint" })}
+                                className="bg-green-700 hover:bg-green-600 text-amber-200 text-xs px-3 py-1 rounded border border-green-600 ml-auto inline-block"
+                              >
+                                HINT
+                              </button>
+                            </div>
                           </>
                         )}
                       </div>
@@ -489,12 +518,14 @@ function App() {
                           SOLVE
                         </RPGButton>
                       </div>
-                      <button
-                        onClick={() => setMessage({ text: currentLocation.finalRiddle.hint, type: "hint" })}
-                        className="text-amber-400 text-sm underline hover:text-amber-300"
-                      >
-                        Need a hint?
-                      </button>
+                      <div className="text-right">
+                        <button
+                          onClick={() => setMessage({ text: currentLocation.finalRiddle.hint, type: "hint" })}
+                          className="bg-green-700 hover:bg-green-600 text-amber-200 text-xs px-3 py-1 rounded border border-green-600 ml-auto inline-block"
+                        >
+                          HINT
+                        </button>
+                      </div>
                     </>
                   )}
                   
@@ -530,33 +561,39 @@ function App() {
             
             {/* Final Location */}
             {currentLocation.id === "hotel" && gameState.locationUnlocked && !gameState.gameCompleted && (
-              <div id="final-challenge" className="game-section bg-yellow-900/70 border-2 border-yellow-800 p-2 sm:p-4 rounded-lg mb-4 sm:mb-6 animate-fadeIn">
-                <h2 className="text-lg sm:text-xl text-amber-200 mb-2 sm:mb-3 pixelated">💍 Final Challenge</h2>
-                <div className="game-box bg-green-900/50 border border-yellow-700 p-3 mb-4 rounded-lg">
-                  <p className="mb-4">{currentLocation.challenges[0].prompt}</p>
-                  
-                  <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 mb-2">
-                    <RPGInput
-                      value={input}
-                      onChange={handleInputChange}
-                      placeholder="Your answer..."
-                    />
-                    <RPGButton
-                      onClick={handleFinalChallenge}
-                      primary={true}
-                      className="whitespace-nowrap"
-                    >
-                      SUBMIT
-                    </RPGButton>
+              <>
+                {/* Show challenges first */}
+                {gameState.completedChallenges.length < 3 && (
+                  <div id="final-pre-challenges" className="game-section bg-yellow-900/70 border-2 border-yellow-800 p-2 sm:p-4 rounded-lg mb-4 sm:mb-6 animate-fadeIn">
+                    <h2 className="text-lg sm:text-xl text-amber-200 mb-2 sm:mb-3 pixelated">
+                      🎯 Final Preparations ({gameState.completedChallenges.length}/3)
+                    </h2>
+                    <div className="game-box bg-green-900/50 border border-yellow-700 p-3 mb-4 rounded-lg">
+                      <p className="mb-2 text-center">Complete all preparations before the big moment!</p>
+                    </div>
                   </div>
-                  <button
-                    onClick={() => setMessage({ text: currentLocation.challenges[0].hint, type: "hint" })}
-                    className="text-amber-400 text-sm underline hover:text-amber-300"
-                  >
-                    Need a hint?
-                  </button>
-                </div>
-              </div>
+                )}
+                
+                {/* Show the final button only after completing the first 3 challenges */}
+                {gameState.completedChallenges.length >= 3 && (
+                  <div id="final-challenge" className="game-section bg-yellow-900/70 border-2 border-yellow-800 p-2 sm:p-4 rounded-lg mb-4 sm:mb-6 animate-fadeIn">
+                    <h2 className="text-lg sm:text-xl text-amber-200 mb-2 sm:mb-3 pixelated">💍 Final Challenge</h2>
+                    <div className="game-box bg-green-900/50 border border-yellow-700 p-3 mb-4 rounded-lg">
+                      <p className="mb-6 text-center text-lg">Are you ready for the big moment?</p>
+                      
+                      <div className="flex justify-center mb-4">
+                        <RPGButton
+                          onClick={handleFinalChallenge}
+                          primary={true}
+                          className="py-3 px-6 text-base font-bold animate-pulse"
+                        >
+                          PRESS THIS BUTTON WHEN YOU'RE READY
+                        </RPGButton>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
             
             {/* Final Message */}
@@ -585,6 +622,19 @@ function App() {
             message={message.text}
             type={message.type}
           />
+        </div>
+      )}
+      
+      {/* Hints button */}
+      {gameState.started && !gameState.gameCompleted && (
+        <div className="fixed bottom-6 right-4 z-10">
+          <RPGButton
+            onClick={showAllHints}
+            primary={false}
+            className="text-xs py-1 px-3"
+          >
+            HINTS
+          </RPGButton>
         </div>
       )}
       
