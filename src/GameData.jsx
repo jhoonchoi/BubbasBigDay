@@ -21,7 +21,7 @@ export const gameData = {
           },
           {
             type: "completion",
-            prompt: "Make sure Rachel has her make and hair done up nice",
+            prompt: "Make sure Rachel has her make up and hair done nicely",
             answer: "yes",
             hint: "Uhh, I'm not the expert here"
           },
@@ -38,13 +38,13 @@ export const gameData = {
           answer: "cafe fixe",
           hint: "Caffeine Fix... you get it?"
         },
-        nextLocation: "Café Fixe at 1642 Beacon St, Brookline. Let's leave the secret code with the cashier."
+        nextLocation: "Café Fixe at 1642 Beacon St, Brookline. Tell them you're there for 'Today's Special Coffee'."
       },
       {
         id: "cafe",
         name: "Café Fixe",
         passcode: "latte",
-        description: "Our favorite spot for a good cup of coffee",
+        description: "Our favorite spot for a good cup of coffee. Tell them you're there for 'Today's Special Coffee'",
         challenges: [
           {
             type: "completion",
@@ -65,13 +65,13 @@ export const gameData = {
           answer: "bar vlaha",
           hint: "#2 in Yelp's list of brunch spots in Brookline"
         },
-        nextLocation: "Bar Vlaha at 1653 Beacon St, Brookline. Let's leave the secret code with the staff there."
+        nextLocation: "Bar Vlaha at 1653 Beacon St, Brookline. Let's ask the staff for the 'Secret Table for 3'."
       },
       {
         id: "restaurant",
         name: "Bar Vlaha",
         passcode: "tzatziki",
-        description: "Boston's finest brunch spot",
+        description: "Boston's finest brunch spot. Ask the staff for the 'Secret Table for 3'",
         challenges: [
           {
             type: "completion",
@@ -97,7 +97,7 @@ export const gameData = {
       {
         id: "nailsalon",
         name: "The Nail Studio",
-        passcode: "cuticles",
+        passcode: "cuticle",
         description: "Baby's gotta get her nails taken care of",
         challenges: [
           {
@@ -113,7 +113,7 @@ export const gameData = {
           answer: "the hotel",
           hint: "We've only been to one together once."
         },
-        nextLocation: "154 Berkeley St, Boston. Go to the front desk and ask for the key to your heart."
+        nextLocation: "154 Berkeley St, Boston. Go to the lobby and seek out a Mexican Agent."
       },
       {
         id: "hotel",
@@ -123,7 +123,7 @@ export const gameData = {
         challenges: [
           {
             type: "task",
-            prompt: "Go to the hotel lobby and tell me the name of the Mexican there",
+            prompt: "Go to the hotel lobby and tell me the name of `the Mexican Agent",
             answer: "Andrew Ong Garcia",
             hint: "He'll behave I promise."
           },
