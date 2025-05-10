@@ -34,7 +34,7 @@ export const gameData = {
         ],
         finalRiddle: {
           prompt: "Our ____ ____ spot, where we get our ____ fix and a good start to the day", // Sunday, morning, caffeine
-          letterBank: "CATBEFJHMRIOSCNPAL",
+          letterBank: "XEFCIAFETO",
           answer: "cafe fixe",
           hint: "Caffeine Fix... you get it?"
         },

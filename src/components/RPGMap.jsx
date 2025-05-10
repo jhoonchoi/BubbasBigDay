@@ -28,7 +28,7 @@ const RPGMap = ({
     cafe: "☕",
     restaurant: "🍽️",
     salon: "💅",
-    hotel: "🏨",
+    hotel: "💍",
     player: "🧍",
     unknown: "❓"
   };

@@ -202,6 +202,16 @@ export const RPGLetterBank = ({
         </div>
       ))}
       
+      {/* Space character button */}
+      <div 
+        className="inline-flex items-center justify-center bg-green-800 text-amber-100 w-16 h-10
+                  rounded-md border border-yellow-700 
+                  hover:bg-green-700 cursor-pointer transition-all duration-200"
+        onClick={() => onLetterClick && onLetterClick(' ')}
+      >
+        <span className="text-center font-pixel">Space</span>
+      </div>
+      
       <style jsx>{`
         .letter-bank div {
           transition: all 0.2s ease;
