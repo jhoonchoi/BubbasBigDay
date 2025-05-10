@@ -147,7 +147,7 @@ export const RPGInput = ({
         onChange={onChange}
         placeholder={placeholder}
         className={`
-          flex-1 bg-yellow-900/30 border-2 border-yellow-700 
+          flex-1 bg-yellow-950 border-2 border-yellow-700 
           rounded p-2 text-amber-100 w-full
           ${className}
         `}
@@ -161,6 +161,11 @@ export const RPGInput = ({
         input {
           outline: none;
           transition: all 0.2s ease;
+          background-color: rgba(41, 20, 5, 0.9) !important; /* Much darker background */
+        }
+        
+        input::placeholder {
+          color: rgba(254, 243, 199, 0.5); /* Semi-transparent placeholder */
         }
         
         input:focus {

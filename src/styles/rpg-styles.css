@@ -1,4 +1,6 @@
-/* Import pixel font */
+.bg-yellow-950 {
+  background-color: #422006;
+}/* Import pixel font */
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 /* Base styles */
@@ -208,8 +210,25 @@ button {
   justify-content: space-between;
 }
 
+.text-yellow-300 {
+  color: #fde047;
+}
+
+.text-white {
+  color: #ffffff;
+}
+
+.bg-blue-800 {
+  background-color: #1e40af;
+}
+
 .justify-center {
   justify-content: center;
+}
+
+.px-8 {
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 .flex-wrap {

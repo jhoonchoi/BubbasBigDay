@@ -2,157 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Compass } from 'lucide-react';
 import { RPGButton, RPGInput, RPGLetterBank, RPGNotification, RPGDialogBox } from './components/RPGUIComponents';
 import RPGMap from './components/RPGMap';
-
-// Game data structure
-const gameData = {
-  title: "Bubba's Big Day",
-  introduction: {
-    title: "Bubba's Big Day",
-    story: "After waiting for what feels like forever for the proposal, baby has decided to take matters into her own hands, and hunt down Bubba. Bubba seems to be nowhere to be found, but there's a trail of clues left around Boston. Follow the path of crumbs, complete the challenges at each location, and perhaps you'll find what you've been waiting for at the end of this adventure...",
-    instructions: "At each location, you'll need to:\n1. Enter the location passcode to confirm you're in the right place\n2. Complete a set of challenges\n3. Solve a riddle to find your next destination"
-  },
-  locations: [
-    {
-      id: "apartment",
-      name: "Baby's Apartment",
-      passcode: "home123",
-      description: "Where your journey begins, surrounded by memories you've built together.",
-      challenges: [
-        {
-          type: "question",
-          prompt: "Find our first photo together and enter the date it was taken (MM/DD/YYYY)",
-          answer: "06/14/2022",
-          hint: "Check the photo album on the bookshelf"
-        },
-        {
-          type: "task",
-          prompt: "Find the hidden note I left inside your favorite coffee mug",
-          answer: "iloveyou",
-          hint: "It's the blue mug with the chip on the handle"
-        }
-      ],
-      finalRiddle: {
-        prompt: "Where we had our first date, where the barista knows your name, a place of warmth and morning ritual.",
-        letterBank: "CATBEFJHMRIOSCNPAL",
-        answer: "cafe fixe",
-        hint: "The place where you always order a vanilla latte with an extra shot"
-      },
-      nextLocation: "Café Fixe at 1642 Beacon St, Brookline. Ask for the envelope with your name on it."
-    },
-    {
-      id: "cafe",
-      name: "Café Fixe",
-      passcode: "vanilla",
-      description: "The cozy corner cafe where we spent our first date talking until closing time.",
-      challenges: [
-        {
-          type: "task",
-          prompt: "Order my usual drink and find the message written under the cup",
-          answer: "forever",
-          hint: "I always get a medium americano with room for cream"
-        },
-        {
-          type: "question",
-          prompt: "What song was playing when we first kissed outside this cafe?",
-          answer: "perfect",
-          hint: "It was an Ed Sheeran song"
-        }
-      ],
-      finalRiddle: {
-        prompt: "Where we celebrate special occasions, where I first told you I love you, candlelight and your favorite dish await.",
-        letterBank: "BAVRALHIABLTA",
-        answer: "bar vlaha",
-        hint: "You always order the same pasta dish here"
-      },
-      nextLocation: "Bar Vlaha at 1653 Beacon St, Brookline. Reservation under your name at the host stand."
-    },
-    {
-      id: "restaurant",
-      name: "Bar Vlaha",
-      passcode: "pasta22",
-      description: "Our special occasion spot where we've celebrated anniversaries and milestones.",
-      challenges: [
-        {
-          type: "task",
-          prompt: "Find the special menu item named after you",
-          answer: "amore",
-          hint: "Check today's specials"
-        },
-        {
-          type: "question",
-          prompt: "What did I whisper to you the first time we came here?",
-          answer: "beautiful",
-          hint: "It was a comment about how you looked in the candlelight"
-        }
-      ],
-      finalRiddle: {
-        prompt: "A place of pampering and relaxation, where you go to treat yourself, colored bottles lined up like soldiers.",
-        letterBank: "NTSALIUHTDOAI",
-        hint: "You had your nails done here last month before our friend's wedding",
-        answer: "nail studio"
-      },
-      nextLocation: "The Nail Studio at 215 Newbury St, Boston. Tell them you're there for the 'Special Package'."
-    },
-    {
-      id: "nailsalon",
-      name: "The Nail Studio",
-      passcode: "polish",
-      description: "Your favorite spot to relax and get pampered before special events.",
-      challenges: [
-        {
-          type: "task",
-          prompt: "Choose a nail color that matches our first gift to you",
-          answer: "ruby",
-          hint: "Think about the earrings I gave you for your birthday last year"
-        },
-        {
-          type: "question",
-          prompt: "What name did we give to our future dream house?",
-          answer: "serenity",
-          hint: "We talked about it during your last manicure here"
-        }
-      ],
-      finalRiddle: {
-        prompt: "A place of luxury and rest for travelers, where the city skyline meets the clouds, room with a view awaits.",
-        letterBank: "THOTELEH",
-        answer: "the hotel",
-        hint: "We stayed here when my parents first visited"
-      },
-      nextLocation: "The Hotel, 154 Berkeley St, Boston. Go to the front desk and ask for the key to your heart."
-    },
-    {
-      id: "hotel",
-      name: "The Hotel",
-      passcode: "forever",
-      description: "A luxury tower overlooking the city where our next chapter begins.",
-      challenges: [
-        {
-          type: "task",
-          prompt: "Go to room 823 and find the rose petals leading to your final surprise",
-          answer: "yes",
-          hint: "Follow your heart"
-        }
-      ],
-      finalMessage: "This journey ends where our new beginning starts. I'm waiting for you inside with the question you've been waiting for. It's time for us to write our next chapter together."
-    }
-  ]
-};
-
-// Map tile types for the expanding map
-const mapTiles = {
-  grass: "🌿",
-  tree: "🌲",
-  path: "🟤",
-  water: "🌊",
-  mountain: "⛰️",
-  house: "🏠",
-  cafe: "☕",
-  restaurant: "🍽️",
-  salon: "💅",
-  hotel: "🏨",
-  player: "🧍",
-  unknown: "❓"
-};
+import { gameData } from './GameData';
   
 // Main App Component
 function App() {
@@ -441,7 +291,6 @@ function App() {
     return (
       <RPGMap 
         mapData={gameState.revealedMap}
-        tileTypes={mapTiles}
         currentLocationIndex={gameState.currentLocationIndex}
         locationPositions={locationPositions}
         animate={true}
@@ -534,8 +383,13 @@ function App() {
                     <div key={index} className="challenge-item">
                       <div className={`game-box bg-green-900/50 border ${gameState.completedChallenges.includes(index) ? 'border-yellow-400' : 'border-yellow-700'} p-4 rounded-lg`}>
                         <div className="flex justify-between items-start mb-2">
-                          <span className={`text-sm px-2 py-1 rounded-md ${challenge.type === 'question' ? 'bg-green-800 text-amber-200' : 'bg-yellow-800 text-amber-200'}`}>
-                            {challenge.type === 'question' ? 'QUESTION' : 'TASK'}
+                          <span className={`text-sm px-2 py-1 rounded-md ${
+                            challenge.type === 'question' ? 'bg-green-800 text-amber-200' : 
+                            challenge.type === 'completion' ? 'bg-blue-800 text-amber-200' :
+                            'bg-yellow-800 text-amber-200'
+                          }`}>
+                            {challenge.type === 'question' ? 'QUESTION' : 
+                             challenge.type === 'completion' ? 'COMPLETION' : 'TASK'}
                           </span>
                           {gameState.completedChallenges.includes(index) && (
                             <span className="text-yellow-400 text-sm">✓ COMPLETED</span>
@@ -546,19 +400,33 @@ function App() {
                         
                         {!gameState.completedChallenges.includes(index) && (
                           <>
-                            <div className="flex space-x-2 mb-2">
-                              <RPGInput
-                                value={input}
-                                onChange={handleInputChange}
-                                placeholder="Your answer..."
-                              />
-                              <RPGButton
-                                onClick={() => checkChallengeAnswer(index)}
-                                primary={true}
-                              >
-                                SUBMIT
-                              </RPGButton>
-                            </div>
+                            {challenge.type === 'completion' ? (
+                              // Completion type challenge just needs a confirm button
+                              <div className="flex justify-center mb-2">
+                                <RPGButton
+                                  onClick={() => checkChallengeCompletion(index)}
+                                  primary={true}
+                                  className="px-8"
+                                >
+                                  CONFIRM COMPLETION
+                                </RPGButton>
+                              </div>
+                            ) : (
+                              // Question/Task type challenges need text input
+                              <div className="flex space-x-2 mb-2">
+                                <RPGInput
+                                  value={input}
+                                  onChange={handleInputChange}
+                                  placeholder="Your answer..."
+                                />
+                                <RPGButton
+                                  onClick={() => checkChallengeAnswer(index)}
+                                  primary={true}
+                                >
+                                  SUBMIT
+                                </RPGButton>
+                              </div>
+                            )}
                             <button
                               onClick={() => setMessage({ text: challenge.hint, type: "hint" })}
                               className="text-amber-400 text-sm underline hover:text-amber-300"

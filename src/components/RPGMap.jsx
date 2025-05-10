@@ -5,19 +5,33 @@ import React, { useState, useEffect } from 'react';
  * 
  * @param {Object} props
  * @param {Array} props.mapData - 2D array of map tiles
- * @param {Object} props.tileTypes - Object mapping tile types to display characters
  * @param {Number} props.currentLocationIndex - Current player location index
  * @param {Array} props.locationPositions - Array of location positions on the map
  * @param {Boolean} props.animate - Whether to animate tile reveals
  */
 const RPGMap = ({ 
   mapData = [], 
-  tileTypes = {}, 
   currentLocationIndex = 0,
   locationPositions = [],
   animate = true
 }) => {
   const [animatingTiles, setAnimatingTiles] = useState(new Set());
+
+  // Map tile types for the expanding map
+  const tileTypes = {
+    grass: "🌿",
+    tree: "🌲",
+    path: "🟤",
+    water: "🌊",
+    mountain: "⛰️",
+    house: "🏠",
+    cafe: "☕",
+    restaurant: "🍽️",
+    salon: "💅",
+    hotel: "🏨",
+    player: "🧍",
+    unknown: "❓"
+  };
   
   // Handle animation of newly revealed tiles
   useEffect(() => {
