@@ -342,7 +342,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-green-900 text-amber-100 font-mono overflow-x-hidden w-full" style={{ fontSize: '90%' }}>
+    <div className="min-h-screen bg-green-900 text-amber-100 font-mono overflow-x-hidden w-full pixel-font" style={{ fontSize: '90%' }}>
       {/* Header */}
       <header className="p-2 sm:p-3 bg-yellow-900 border-b-4 border-green-700 flex justify-between items-center w-full">
         <h1 className="text-base sm:text-lg md:text-xl font-bold text-amber-200 pixelated truncate mr-2">
@@ -363,10 +363,10 @@ function App() {
           <div className="game-section bg-yellow-900/70 border-2 border-yellow-800 p-2 sm:p-4 rounded-lg mb-4 sm:mb-6 animate-fadeIn">
             <h2 className="text-lg sm:text-xl text-amber-200 mb-2 sm:mb-3 pixelated">{gameData.introduction.title}</h2>
             <div className="game-box bg-green-900/50 border border-yellow-700 p-3 mb-4 rounded-lg">
-              <p className="mb-3 leading-relaxed">{gameData.introduction.story}</p>
+              <p className="mb-3 leading-relaxed game-story">{gameData.introduction.story}</p>
               <div className="mb-3 p-3 bg-yellow-900/50 rounded-lg border border-yellow-700">
                 <h3 className="text-amber-200 mb-2 pixelated">Instructions:</h3>
-                <p className="whitespace-pre-line">{gameData.introduction.instructions}</p>
+                <p className="whitespace-pre-line game-instructions">{gameData.introduction.instructions}</p>
               </div>
             </div>
             <RPGButton 
@@ -391,7 +391,7 @@ function App() {
             <div id="location-section" className="game-section bg-yellow-900/70 border-2 border-yellow-800 p-2 sm:p-4 rounded-lg mb-4 sm:mb-6 animate-fadeIn">
               <h2 className="text-lg sm:text-xl text-amber-200 mb-2 sm:mb-3 pixelated">🗺️ {currentLocation.name}</h2>
               <div className="game-box bg-green-900/50 border border-yellow-700 p-3 mb-4 rounded-lg">
-                <p className="mb-4">{currentLocation.description}</p>
+                <p className="mb-4 game-description">{currentLocation.description}</p>
                 
                 {!gameState.locationUnlocked && (
                   <div className="passcode-section">
@@ -440,7 +440,7 @@ function App() {
                           )}
                         </div>
                         
-                        <p className="mb-4">{challenge.prompt}</p>
+                        <p className="mb-4 challenge-prompt">{challenge.prompt}</p>
                         
                         {!gameState.completedChallenges.includes(index) && (
                           <>
@@ -494,7 +494,7 @@ function App() {
               <div id="riddle-section" className="game-section bg-yellow-900/70 border-2 border-yellow-800 p-2 sm:p-4 rounded-lg mb-4 sm:mb-6 animate-fadeIn">
                 <h2 className="text-lg sm:text-xl text-amber-200 mb-2 sm:mb-3 pixelated">🧩 Final Riddle</h2>
                 <div className="game-box bg-green-900/50 border border-yellow-700 p-3 mb-4 rounded-lg">
-                  <p className="mb-4">{currentLocation.finalRiddle.prompt}</p>
+                  <p className="mb-4 riddle-text">{currentLocation.finalRiddle.prompt}</p>
                   
                   {!gameState.riddleSolved && (
                     <>
@@ -579,7 +579,7 @@ function App() {
                   <div id="final-challenge" className="game-section bg-yellow-900/70 border-2 border-yellow-800 p-2 sm:p-4 rounded-lg mb-4 sm:mb-6 animate-fadeIn">
                     <h2 className="text-lg sm:text-xl text-amber-200 mb-2 sm:mb-3 pixelated">💍 Final Challenge</h2>
                     <div className="game-box bg-green-900/50 border border-yellow-700 p-3 mb-4 rounded-lg">
-                      <p className="mb-6 text-center text-lg">Are you ready for the big moment?</p>
+                      <p className="mb-6 text-center text-lg next-location-text">Are you ready for the big moment?</p>
                       
                       <div className="flex justify-center mb-4">
                         <RPGButton
@@ -601,7 +601,7 @@ function App() {
               <div id="final-message" className="game-section bg-green-800 border-2 border-yellow-700 p-2 sm:p-4 rounded-lg mb-4 sm:mb-6 animate-heartBeat">
                 <h2 className="text-lg sm:text-xl text-amber-200 mb-2 sm:mb-3 pixelated">💖 A Message For You</h2>
                 <div className="game-box bg-yellow-900/50 border border-yellow-600 p-3 mb-4 rounded-lg">
-                  <p className="text-lg leading-relaxed mb-4">{currentLocation.finalMessage}</p>
+                  <p className="text-lg leading-relaxed mb-4 final-message">{currentLocation.finalMessage}</p>
                   <div className="flex justify-center items-center gap-2 my-3">
                     <div className="text-amber-300 inline-block px-2">❤️</div>
                     <div className="text-amber-300 inline-block px-2">💍</div>
@@ -687,6 +687,127 @@ function App() {
           animation-delay: calc(var(--index, 0) * 0.2s);
           box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
           width: 100%;
+        }
+        
+        .pixel-font {
+          font-family: 'Press Start 2P', monospace;
+          line-height: 1.6;
+        }
+        
+        h1, h2, h3, .pixelated, button {
+          font-family: 'Press Start 2P', monospace;
+        }
+        
+        h1 {
+          font-size: 0.9rem;
+          line-height: 1.6;
+        }
+        
+        h2 {
+          font-size: 0.85rem;
+          margin-bottom: 1rem;
+          line-height: 1.5;
+        }
+        
+        p, .game-description, .challenge-prompt, .riddle-text {
+          font-family: 'Press Start 2P', monospace;
+          font-size: 0.6rem;
+          line-height: 2;
+          letter-spacing: 0px;
+        }
+        
+        input {
+          font-family: monospace;
+          font-size: 110%;
+          line-height: 1.5;
+        }
+        
+        button.rpg-button {
+          font-size: 0.55rem !important;
+          letter-spacing: 0px !important;
+          padding: 0.5rem 0.75rem;
+          line-height: 1.3;
+        }
+        
+        .bg-green-900/70, .bg-yellow-900/70 {
+          padding: 1.5rem !important;
+        }
+        
+        /* Apply pixel font to game content */
+        .game-box p, .challenge-item p, .next-location-text, .game-story, .game-instructions, .final-message {
+          font-family: 'Press Start 2P', monospace;
+          font-size: 0.6rem;
+          line-height: 2;
+          margin-bottom: 1em;
+          letter-spacing: 0px;
+        }
+        
+        /* Font size adjustments for different contexts */
+        .game-story {
+          font-size: 0.5rem;
+          line-height: 2.2;
+          letter-spacing: 0.5px;
+        }
+        
+        .game-instructions {
+          font-size: 0.5rem;
+          line-height: 2.2;
+          letter-spacing: 0.5px;
+        }
+        
+        .challenge-prompt {
+          font-size: 0.55rem;
+          line-height: 2;
+          letter-spacing: 0.5px;
+        }
+        
+        .riddle-text {
+          font-size: 0.55rem;
+          line-height: 2;
+          color: #fde68a;
+          letter-spacing: 0.5px;
+        }
+        
+        .next-location-text {
+          font-size: 0.6rem;
+          line-height: 2;
+          letter-spacing: 0.5px;
+        }
+        
+        .final-message {
+          font-size: 0.6rem;
+          line-height: 2.2;
+          color: #fde68a;
+          letter-spacing: 0.5px;
+        }
+        
+        .game-description {
+          font-size: 0.55rem;
+          line-height: 2;
+          letter-spacing: 0.5px;
+        }
+        
+        /* Add spacing between paragraphs for better readability */
+        .game-box p {
+          margin-bottom: 1.5em;
+        }
+        
+        /* Adjust spacing in challenge sections */
+        .challenge-item {
+          margin-bottom: 1.5rem;
+        }
+        
+        .challenge-item p {
+          margin-bottom: 1.2rem;
+        }
+        
+        /* Increase padding for better readability with smaller fonts */
+        .game-box {
+          padding: 1.5rem !important;
+        }
+        
+        .challenge-item .game-box {
+          padding: 1.2rem !important;
         }
       `}</style>
     </div>

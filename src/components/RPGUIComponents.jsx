@@ -97,6 +97,9 @@ export const RPGButton = ({
           box-shadow: 0 4px 0 ${primary ? '#2a5d34' : '#8b6914'};
           transform: translateY(-2px);
           transition: all 0.1s ease;
+          font-family: 'Press Start 2P', monospace;
+          font-size: 0.8rem;
+          letter-spacing: 0;
         }
         
         .rpg-button:active {
@@ -186,27 +189,35 @@ export const RPGLetterBank = ({
   className = '' 
 }) => {
   return (
-    <div className={`letter-bank flex flex-wrap justify-center gap-1 ${className}`}>
+    <div className={`letter-bank flex flex-wrap justify-center gap-2 ${className}`}>
       {letters.split('').map((letter, i) => (
         <div 
           key={i} 
-          className="inline-block bg-green-800 text-amber-100 w-8 h-8 
-                    flex items-center justify-center rounded-md border border-yellow-700 
+          className="inline-flex items-center justify-center bg-green-800 text-amber-100 w-10 h-10
+                    rounded-md border border-yellow-700 
                     hover:bg-green-700 cursor-pointer transition-all duration-200"
           onClick={() => onLetterClick && onLetterClick(letter)}
         >
-          {letter}
+          <span className="text-center font-pixel">{letter}</span>
         </div>
       ))}
       
       <style jsx>{`
         .letter-bank div {
           transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
         
         .letter-bank div:hover {
           transform: translateY(-2px);
           background-color: #166534;
+        }
+        
+        .font-pixel {
+          font-family: 'Press Start 2P', monospace;
+          font-size: 0.8rem;
         }
       `}</style>
     </div>
