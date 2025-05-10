@@ -321,13 +321,13 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-green-900 text-amber-100 font-mono" style={{ fontSize: '90%' }}>
+    <div className="min-h-screen bg-green-900 text-amber-100 font-mono overflow-x-hidden w-full" style={{ fontSize: '90%' }}>
       {/* Header */}
-      <header className="p-2 sm:p-3 bg-yellow-900 border-b-4 border-green-700 flex justify-between items-center">
-        <h1 className="text-base sm:text-lg md:text-xl font-bold text-amber-200 pixelated">
+      <header className="p-2 sm:p-3 bg-yellow-900 border-b-4 border-green-700 flex justify-between items-center w-full">
+        <h1 className="text-base sm:text-lg md:text-xl font-bold text-amber-200 pixelated truncate mr-2">
           {gameData.title}
         </h1>
-        <div className="flex items-center">
+        <div className="flex items-center shrink-0">
           <Compass className="text-amber-300 mr-1 sm:mr-2" size={16} />
           <span className="text-xs md:text-sm pixelated">
             {gameState.started ? `Location ${gameState.currentLocationIndex + 1}/${gameData.locations.length}` : "Ready to start"}
@@ -336,7 +336,7 @@ function App() {
       </header>
       
       {/* Game container */}
-      <div className="container mx-auto p-2 sm:p-3 md:p-6 max-w-xl">
+      <div className="w-full px-2 sm:px-3 md:px-6 mx-auto max-w-full sm:max-w-xl">
         {/* Introduction */}
         {!gameState.started && (
           <div className="game-section bg-yellow-900/70 border-2 border-yellow-800 p-2 sm:p-4 rounded-lg mb-4 sm:mb-6 animate-fadeIn">
@@ -407,8 +407,8 @@ function App() {
                       <div className={`game-box bg-green-900/50 border ${gameState.completedChallenges.includes(index) ? 'border-yellow-400' : 'border-yellow-700'} p-4 rounded-lg`}>
                         <div className="flex justify-between items-start mb-2">
                           <span className={`text-sm px-2 py-1 rounded-md ${
-                            challenge.type === 'question' ? 'bg-green-800 text-amber-200' : 
-                            challenge.type === 'completion' ? 'bg-blue-800 text-amber-200' :
+                            challenge.type === 'question' ? 'bg-blue-800 text-amber-200' : 
+                            challenge.type === 'completion' ? 'bg-green-800 text-amber-200' :
                             'bg-yellow-800 text-amber-200'
                           }`}>
                             {challenge.type === 'question' ? 'QUESTION' : 
@@ -451,12 +451,6 @@ function App() {
                                 </RPGButton>
                               </div>
                             )}
-                            <button
-                              onClick={() => setMessage({ text: challenge.hint, type: "hint" })}
-                              className="text-amber-400 text-sm underline hover:text-amber-300"
-                            >
-                              Need a hint?
-                            </button>
                           </>
                         )}
                       </div>
@@ -582,25 +576,35 @@ function App() {
             )}
           </>
         )}
-        
-        {/* Message display */}
-        {message.text && (
-          <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 max-w-md">
-            <RPGNotification
-              message={message.text}
-              type={message.type}
-            />
-          </div>
-        )}
       </div>
       
+      {/* Message display */}
+      {message.text && (
+        <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 w-[90%] max-w-md">
+          <RPGNotification
+            message={message.text}
+            type={message.type}
+          />
+        </div>
+      )}
+      
       {/* Footer */}
-      <footer className="bg-yellow-900 p-2 sm:p-4 border-t border-green-800 text-center text-amber-300/70 text-xs">
+      <footer className="bg-yellow-900 p-2 sm:p-4 border-t border-green-800 text-center text-amber-300/70 text-xs w-full">
         <p>A special treasure hunt created with ❤️</p>
       </footer>
       
       {/* Global styles */}
       <style jsx global>{`
+        * {
+          box-sizing: border-box;
+        }
+        
+        body {
+          overflow-x: hidden;
+          width: 100%;
+          max-width: 100vw;
+        }
+        
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: translateY(0); }
@@ -632,6 +636,7 @@ function App() {
           animation-fill-mode: both;
           animation-delay: calc(var(--index, 0) * 0.2s);
           box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+          width: 100%;
         }
       `}</style>
     </div>
