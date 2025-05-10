@@ -81,6 +81,28 @@ function App() {
     }
   };
   
+  // Check completion-type challenge
+  const checkChallengeCompletion = (challengeIndex) => {
+    if (!gameState.completedChallenges.includes(challengeIndex)) {
+      const newCompletedChallenges = [...gameState.completedChallenges, challengeIndex];
+      
+      setGameState({
+        ...gameState,
+        completedChallenges: newCompletedChallenges
+      });
+      
+      setMessage({ text: "Challenge completed!", type: "success" });
+      
+      // Check if all challenges are completed
+      if (newCompletedChallenges.length === totalChallenges) {
+        // Scroll to riddle section after a delay
+        setTimeout(() => {
+          document.getElementById('riddle-section')?.scrollIntoView({ behavior: 'smooth' });
+        }, 800);
+      }
+    }
+  };
+  
   // Check riddle answer
   const checkRiddleAnswer = () => {
     if (currentLocation.finalRiddle && input.toLowerCase() === currentLocation.finalRiddle.answer.toLowerCase()) {
@@ -291,6 +313,7 @@ function App() {
     return (
       <RPGMap 
         mapData={gameState.revealedMap}
+        tileTypes={mapTiles}
         currentLocationIndex={gameState.currentLocationIndex}
         locationPositions={locationPositions}
         animate={true}
@@ -299,14 +322,14 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-green-900 text-amber-100 font-mono">
+    <div className="min-h-screen bg-green-900 text-amber-100 font-mono" style={{ fontSize: '90%' }}>
       {/* Header */}
-      <header className="p-4 bg-yellow-900 border-b-4 border-green-700 flex justify-between items-center">
-        <h1 className="text-xl md:text-2xl font-bold text-amber-200 pixelated">
+      <header className="p-2 sm:p-3 bg-yellow-900 border-b-4 border-green-700 flex justify-between items-center">
+        <h1 className="text-base sm:text-lg md:text-xl font-bold text-amber-200 pixelated">
           {gameData.title}
         </h1>
         <div className="flex items-center">
-          <Compass className="text-amber-300 mr-2" />
+          <Compass className="text-amber-300 mr-1 sm:mr-2" size={16} />
           <span className="text-xs md:text-sm pixelated">
             {gameState.started ? `Location ${gameState.currentLocationIndex + 1}/${gameData.locations.length}` : "Ready to start"}
           </span>
@@ -314,14 +337,14 @@ function App() {
       </header>
       
       {/* Game container */}
-      <div className="container mx-auto p-4 md:p-8 max-w-3xl">
+      <div className="container mx-auto p-2 sm:p-3 md:p-6 max-w-xl">
         {/* Introduction */}
         {!gameState.started && (
-          <div className="game-section bg-yellow-900/70 border-2 border-yellow-800 p-6 rounded-lg mb-8 animate-fadeIn">
-            <h2 className="text-2xl text-amber-200 mb-4 pixelated">{gameData.introduction.title}</h2>
-            <div className="game-box bg-green-900/50 border border-yellow-700 p-4 mb-6 rounded-lg">
-              <p className="mb-4 leading-relaxed">{gameData.introduction.story}</p>
-              <div className="mb-4 p-4 bg-yellow-900/50 rounded-lg border border-yellow-700">
+          <div className="game-section bg-yellow-900/70 border-2 border-yellow-800 p-2 sm:p-4 rounded-lg mb-4 sm:mb-6 animate-fadeIn">
+            <h2 className="text-lg sm:text-xl text-amber-200 mb-2 sm:mb-3 pixelated">{gameData.introduction.title}</h2>
+            <div className="game-box bg-green-900/50 border border-yellow-700 p-3 mb-4 rounded-lg">
+              <p className="mb-3 leading-relaxed">{gameData.introduction.story}</p>
+              <div className="mb-3 p-3 bg-yellow-900/50 rounded-lg border border-yellow-700">
                 <h3 className="text-amber-200 mb-2 pixelated">Instructions:</h3>
                 <p className="whitespace-pre-line">{gameData.introduction.instructions}</p>
               </div>
@@ -345,15 +368,15 @@ function App() {
             </div>
             
             {/* Location information */}
-            <div id="location-section" className="game-section bg-yellow-900/70 border-2 border-yellow-800 p-6 rounded-lg mb-8 animate-fadeIn">
-              <h2 className="text-2xl text-amber-200 mb-4 pixelated">🗺️ {currentLocation.name}</h2>
-              <div className="game-box bg-green-900/50 border border-yellow-700 p-4 mb-6 rounded-lg">
+            <div id="location-section" className="game-section bg-yellow-900/70 border-2 border-yellow-800 p-2 sm:p-4 rounded-lg mb-4 sm:mb-6 animate-fadeIn">
+              <h2 className="text-lg sm:text-xl text-amber-200 mb-2 sm:mb-3 pixelated">🗺️ {currentLocation.name}</h2>
+              <div className="game-box bg-green-900/50 border border-yellow-700 p-3 mb-4 rounded-lg">
                 <p className="mb-4">{currentLocation.description}</p>
                 
                 {!gameState.locationUnlocked && (
                   <div className="passcode-section">
                     <h3 className="text-amber-200 mb-2 pixelated">Enter Location Passcode:</h3>
-                    <div className="flex space-x-2">
+                    <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                       <RPGInput
                         value={input}
                         onChange={handleInputChange}
@@ -362,6 +385,7 @@ function App() {
                       <RPGButton
                         onClick={checkPasscode}
                         primary={true}
+                        className="whitespace-nowrap"
                       >
                         UNLOCK
                       </RPGButton>
@@ -373,8 +397,8 @@ function App() {
             
             {/* Challenges */}
             {gameState.locationUnlocked && (
-              <div id="challenges-section" className="game-section bg-yellow-900/70 border-2 border-yellow-800 p-6 rounded-lg mb-8 animate-fadeIn">
-                <h2 className="text-2xl text-amber-200 mb-4 pixelated">
+              <div id="challenges-section" className="game-section bg-yellow-900/70 border-2 border-yellow-800 p-2 sm:p-4 rounded-lg mb-4 sm:mb-6 animate-fadeIn">
+                <h2 className="text-lg sm:text-xl text-amber-200 mb-2 sm:mb-3 pixelated">
                   🎯 Challenges ({completedChallengesCount}/{totalChallenges})
                 </h2>
                 
@@ -413,7 +437,7 @@ function App() {
                               </div>
                             ) : (
                               // Question/Task type challenges need text input
-                              <div className="flex space-x-2 mb-2">
+                              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 mb-2">
                                 <RPGInput
                                   value={input}
                                   onChange={handleInputChange}
@@ -422,6 +446,7 @@ function App() {
                                 <RPGButton
                                   onClick={() => checkChallengeAnswer(index)}
                                   primary={true}
+                                  className="whitespace-nowrap"
                                 >
                                   SUBMIT
                                 </RPGButton>
@@ -444,9 +469,9 @@ function App() {
             
             {/* Riddle (only shown when all challenges are completed) */}
             {gameState.locationUnlocked && gameState.completedChallenges.length === totalChallenges && !gameState.gameCompleted && currentLocation.id !== "hotel" && (
-              <div id="riddle-section" className="game-section bg-yellow-900/70 border-2 border-yellow-800 p-6 rounded-lg mb-8 animate-fadeIn">
-                <h2 className="text-2xl text-amber-200 mb-4 pixelated">🧩 Final Riddle</h2>
-                <div className="game-box bg-green-900/50 border border-yellow-700 p-4 mb-4 rounded-lg">
+              <div id="riddle-section" className="game-section bg-yellow-900/70 border-2 border-yellow-800 p-2 sm:p-4 rounded-lg mb-4 sm:mb-6 animate-fadeIn">
+                <h2 className="text-lg sm:text-xl text-amber-200 mb-2 sm:mb-3 pixelated">🧩 Final Riddle</h2>
+                <div className="game-box bg-green-900/50 border border-yellow-700 p-3 mb-4 rounded-lg">
                   <p className="mb-4">{currentLocation.finalRiddle.prompt}</p>
                   
                   {!gameState.riddleSolved && (
@@ -457,7 +482,7 @@ function App() {
                         className="mb-4"
                       />
                       
-                      <div className="flex space-x-2 mb-2">
+                      <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 mb-2">
                         <RPGInput
                           value={input}
                           onChange={handleInputChange}
@@ -466,6 +491,7 @@ function App() {
                         <RPGButton
                           onClick={checkRiddleAnswer}
                           primary={true}
+                          className="whitespace-nowrap"
                         >
                           SOLVE
                         </RPGButton>
@@ -491,10 +517,10 @@ function App() {
             
             {/* Next Location Reveal */}
             {gameState.nextLocationRevealed && !gameState.gameCompleted && (
-              <div id="next-location-section" className="game-section bg-yellow-900/70 border-2 border-yellow-800 p-6 rounded-lg mb-8 animate-fadeIn">
-                <h2 className="text-2xl text-amber-200 mb-4 pixelated">📍 Next Destination</h2>
-                <div className="game-box bg-green-900/50 border border-yellow-700 p-4 mb-6 rounded-lg">
-                  <div className="bg-yellow-950/50 p-4 mb-4 rounded-lg border border-yellow-800/50">
+              <div id="next-location-section" className="game-section bg-yellow-900/70 border-2 border-yellow-800 p-2 sm:p-4 rounded-lg mb-4 sm:mb-6 animate-fadeIn">
+                <h2 className="text-lg sm:text-xl text-amber-200 mb-2 sm:mb-3 pixelated">📍 Next Destination</h2>
+                <div className="game-box bg-green-900/50 border border-yellow-700 p-3 mb-4 rounded-lg">
+                  <div className="bg-yellow-950/50 p-3 mb-3 rounded-lg border border-yellow-800/50">
                     <p className="text-lg mb-2">Go to:</p>
                     <p className="text-amber-300 font-bold">{currentLocation.nextLocation}</p>
                   </div>
@@ -511,12 +537,12 @@ function App() {
             
             {/* Final Location */}
             {currentLocation.id === "hotel" && gameState.locationUnlocked && !gameState.gameCompleted && (
-              <div id="final-challenge" className="game-section bg-yellow-900/70 border-2 border-yellow-800 p-6 rounded-lg mb-8 animate-fadeIn">
-                <h2 className="text-2xl text-amber-200 mb-4 pixelated">💍 Final Challenge</h2>
-                <div className="game-box bg-green-900/50 border border-yellow-700 p-4 mb-6 rounded-lg">
+              <div id="final-challenge" className="game-section bg-yellow-900/70 border-2 border-yellow-800 p-2 sm:p-4 rounded-lg mb-4 sm:mb-6 animate-fadeIn">
+                <h2 className="text-lg sm:text-xl text-amber-200 mb-2 sm:mb-3 pixelated">💍 Final Challenge</h2>
+                <div className="game-box bg-green-900/50 border border-yellow-700 p-3 mb-4 rounded-lg">
                   <p className="mb-4">{currentLocation.challenges[0].prompt}</p>
                   
-                  <div className="flex space-x-2 mb-2">
+                  <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 mb-2">
                     <RPGInput
                       value={input}
                       onChange={handleInputChange}
@@ -525,6 +551,7 @@ function App() {
                     <RPGButton
                       onClick={handleFinalChallenge}
                       primary={true}
+                      className="whitespace-nowrap"
                     >
                       SUBMIT
                     </RPGButton>
@@ -541,11 +568,11 @@ function App() {
             
             {/* Final Message */}
             {gameState.gameCompleted && (
-              <div id="final-message" className="game-section bg-green-800 border-2 border-yellow-700 p-6 rounded-lg mb-8 animate-heartBeat">
-                <h2 className="text-2xl text-amber-200 mb-4 pixelated">💖 A Message For You</h2>
-                <div className="game-box bg-yellow-900/50 border border-yellow-600 p-6 mb-6 rounded-lg">
-                  <p className="text-lg leading-relaxed mb-6">{currentLocation.finalMessage}</p>
-                  <div className="flex justify-center items-center gap-2 my-4">
+              <div id="final-message" className="game-section bg-green-800 border-2 border-yellow-700 p-2 sm:p-4 rounded-lg mb-4 sm:mb-6 animate-heartBeat">
+                <h2 className="text-lg sm:text-xl text-amber-200 mb-2 sm:mb-3 pixelated">💖 A Message For You</h2>
+                <div className="game-box bg-yellow-900/50 border border-yellow-600 p-3 mb-4 rounded-lg">
+                  <p className="text-lg leading-relaxed mb-4">{currentLocation.finalMessage}</p>
+                  <div className="flex justify-center items-center gap-2 my-3">
                     <div className="text-amber-300 inline-block px-2">❤️</div>
                     <div className="text-amber-300 inline-block px-2">💍</div>
                     <div className="text-amber-300 inline-block px-2">❤️</div>
@@ -569,7 +596,7 @@ function App() {
       </div>
       
       {/* Footer */}
-      <footer className="bg-yellow-900 p-4 border-t border-green-800 text-center text-amber-300/70 text-xs">
+      <footer className="bg-yellow-900 p-2 sm:p-4 border-t border-green-800 text-center text-amber-300/70 text-xs">
         <p>A special treasure hunt created with ❤️</p>
       </footer>
       

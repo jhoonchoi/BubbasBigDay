@@ -16,7 +16,7 @@ const RPGMap = ({
   animate = true
 }) => {
   const [animatingTiles, setAnimatingTiles] = useState(new Set());
-
+  
   // Map tile types for the expanding map
   const tileTypes = {
     grass: "🌿",
@@ -75,7 +75,7 @@ const RPGMap = ({
       <div 
         key={`${x}-${y}`} 
         className={`
-          map-tile w-8 h-8 flex items-center justify-center
+          map-tile w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center text-sm sm:text-base
           ${isCurrentLocation ? 'animate-pulse border-2 border-yellow-400' : ''}
           ${isAnimating ? 'tile-reveal' : ''}
           ${tileType !== 'unknown' ? tileClassName : ''}
@@ -105,21 +105,21 @@ const RPGMap = ({
       </div>
       
       {/* Legend */}
-      <div className="mt-3 flex flex-wrap justify-center gap-2 text-xs">
-        <div className="flex items-center">
-          <div className="w-4 h-4 bg-green-800 mr-1"></div>
+      <div className="mt-2 flex flex-wrap justify-center gap-1 text-xs leading-tight">
+        <div className="flex items-center mr-1">
+          <div className="w-2 h-2 sm:w-3 sm:h-3 bg-green-800 mr-1"></div>
           <span>Grass</span>
         </div>
-        <div className="flex items-center">
-          <div className="w-4 h-4 bg-yellow-800 mr-1"></div>
+        <div className="flex items-center mr-1">
+          <div className="w-2 h-2 sm:w-3 sm:h-3 bg-yellow-800 mr-1"></div>
           <span>Path</span>
         </div>
-        <div className="flex items-center">
-          <div className="w-4 h-4 bg-green-950 mr-1"></div>
+        <div className="flex items-center mr-1">
+          <div className="w-2 h-2 sm:w-3 sm:h-3 bg-green-950 mr-1"></div>
           <span>Tree</span>
         </div>
         <div className="flex items-center">
-          <div className="w-4 h-4 border border-dashed border-yellow-500 mr-1"></div>
+          <div className="w-2 h-2 sm:w-3 sm:h-3 border border-dashed border-yellow-500 mr-1"></div>
           <span>Current</span>
         </div>
       </div>
